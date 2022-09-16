@@ -10,11 +10,11 @@ If the matching digits are in their right positions, they are "hits", if they in
 
 Example:
 
-Code master private solution: 4 2 7 1
-Code breaker's public solution: 1 2 3 4
-Answer: 1 hit and 2 blows. (The hit is "2" in the second position, the blows are "4" and "1".)
+Code master private solution: 4 2 7 1 <br />
+Code breaker's public solution: 1 2 3 4 <br />
+Answer: 1 hit and 2 blows. (The hit is "2" in the second position, the blows are "4" and "1".) <br />
 
-The code breaker wins by guessing the secret sequence in a set number of attempts. In the example above, if the maximum number of attempts is not yet reached and in the next round the code breaker guessed the exact sequence "4 2 7 1" they will have 4 hits and win the game. dd
+The code breaker wins by guessing the secret sequence in a set number of attempts. In the example above, if the maximum number of attempts is not yet reached and in the next round the code breaker guessed the exact sequence "4 2 7 1" they will have 4 hits and win the game. 
 
 There are many variations of Mastermind (this implementation is one of them). More information on the game can be found here: https://en.wikipedia.org/wiki/Mastermind_(board_game).
 
