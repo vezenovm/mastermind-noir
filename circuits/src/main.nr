@@ -19,18 +19,12 @@ fn main(
 
     for i in 0..4 {
         let mut invalidInputFlag = 1;
-        if guess[i] > 9 {
+        if (guess[i] > 9) | (guess[i] == 0) {
             invalidInputFlag = 0;
         }
-        if guess[i] == 0 {
-            invalidInputFlag = 0;
-        }
-        if soln[i] > 9 {
+        if (soln[i] > 9) | (soln[i] == 0) {
             invalidInputFlag = 0;
         } 
-        if soln[i] == 0 {
-            invalidInputFlag = 0;
-        }
         constrain invalidInputFlag == 1;
         for j in (i+1)..4 { // Check that the guess and solution digits are unique
             constrain guess[i] != guess[j];
