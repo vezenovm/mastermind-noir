@@ -1,5 +1,23 @@
 # ZK Mastermind using Noir
 
+## Gameplay
+
+The game has two players, a code master and code breaker. 
+
+The code master generates 4 secret digits in a set sequence. Digits can be between 1-9 and the digits must all be different. 
+Then, each turn, the code breaker tries to guess the code master's digits, who then gives the number of matches.  
+If the matching digits are in their right positions, they are "hits", if they in different positions, they are "blows". 
+
+Example:
+
+Code master private solution: 4 2 7 1
+Code breaker's public solution: 1 2 3 4
+Answer: 1 hit and 2 blows. (The hit is "2" in the second position, the blows are "4" and "1".)
+
+The code breaker wins by guessing the secret sequence in a set number of attempts. In the example above, if the maximum number of attempts is not yet reached and in the next round the code breaker guessed the exact sequence "4 2 7 1" they will have 4 hits and win the game. dd
+
+There are many variations of Mastermind (this implementation is one of them). More information on the game can be found here: https://en.wikipedia.org/wiki/Mastermind_(board_game).
+
 ## Requirements
 
 - Noir is based upon [Rust](https://www.rust-lang.org/tools/install), and we will need to Noir's package manager `nargo` in order to compile our circuits. Further installation instructions for can be found [here](https://noir-lang.github.io/book/getting_started/install.html).
@@ -56,7 +74,7 @@ let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
 const proof = await create_proof(prover, acir, abi);
 ```
 
-The `verify_proof` method then takes in the previously generated verifier and proof and returns either `true` or `false`. A verifier also needs to accept the circuits public inputs in order to be valid. Our prover prepends the public inputs to the proof.
+The `verify_proof` method then takes in the previously generated verifier and proof and returns either `true` or `false`. A verifier also needs to accept the circuits public inputs in order to be valid. Our prover prepends the public inputs to the proof. 
 
 ```
 const verified = await verify_proof(verifier, proof);
@@ -65,4 +83,5 @@ const verified = await verify_proof(verifier, proof);
 ### Future work
 
 - The contract command is being updated to match the backend that is used in the typescript wrapper. It will be possible for devs to generate the contract within typescript.
+    - Once contract command is fixed we can make a trustless mastermind game using smart contract verifiers
 - Match the serialization of buffers in JS to what the Rust/C++ backends use to allow for more complex functionality such as hashes to be verified. Currently, if you want to add pedersen hash functionality that will be verified correctly you must write a Rust script that uses the complex functions within Noir's internal packages. 
