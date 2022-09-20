@@ -7,12 +7,12 @@ fn main(
     guessD: pub u32,
     numHit: pub u32,
     numBlow: pub u32,
-    //solnHash: pub Field,
+    solnHash: pub Field,
     solnA: u32,
     solnB: u32,
     solnC: u32,
     solnD: u32,
-    //salt: u32
+    salt: u32
 ) {
     let mut guess = [guessA, guessB, guessC, guessD];
     let mut soln = [solnA, solnB, solnC, solnD];
@@ -54,8 +54,8 @@ fn main(
     constrain hit == numHit;
 
     // TODO: fix JS hashing logic here and add this back
-    //let privSolnHash = std::hash::pedersen([salt as Field, solnA as Field, solnB as Field, solnC as Field, solnD as Field]);
+    let privSolnHash = std::hash::pedersen([salt as Field, solnA as Field, solnB as Field, solnC as Field, solnD as Field]);
 
-    //constrain solnHash == privSolnHash[0];
+    constrain solnHash == privSolnHash[0];
 }
     

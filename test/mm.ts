@@ -21,94 +21,156 @@ describe('Mastermind tests using typescript wrapper', function() {
         barretenberg = await BarretenbergWasm.new();
         await barretenberg.init()
         pedersen = new SinglePedersen(barretenberg);
+
+        let preimage = [
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000032', 'hex'), 
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000001', 'hex'), 
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000002', 'hex'), 
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000003', 'hex'), 
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000004', 'hex'), 
+        ];
+        let solnHash = pedersen.compressInputs(preimage);
+        let solnHashString = `0x` + solnHash.toString('hex');
+        console.log('solnHash: ' + solnHashString); 
     });
 
-    it("Code breaker wins", async () => {
-      let [hit, blow] = calculateHB([1, 2, 3, 4], [1, 2, 3, 4]);
+//     it("Code breaker wins", async () => {
+//       let [hit, blow] = calculateHB([1, 2, 3, 4], [1, 2, 3, 4]);
 
-      let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
-      let acir = acir_from_bytes(acirByteArray);
+//       let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
+//       let acir = acir_from_bytes(acirByteArray);
 
-      let abi = {
-          guessA: "0x01", // Must have even number of digits for hex representation to work
-          guessB: "0x02",
-          guessC: "0x03",
-          guessD: "0x04",
-          numHit: "0x0" + hit.toString(), // We will snot hits or blows > 16, thus we know we will have an uneven number of digits in the hex representation
-          numBlow: "0x0" + blow.toString(),
-          solnA: "0x01",
-          solnB: "0x02",
-          solnC: "0x03",
-          solnD: "0x04",
-      }
+//       let abi = {
+//           guessA: "0x01", // Must have even number of digits for hex representation to work
+//           guessB: "0x02",
+//           guessC: "0x03",
+//           guessD: "0x04",
+//           numHit: "0x0" + hit.toString(), // We will snot hits or blows > 16, thus we know we will have an uneven number of digits in the hex representation
+//           numBlow: "0x0" + blow.toString(),
+//           solnA: "0x01",
+//           solnB: "0x02",
+//           solnC: "0x03",
+//           solnD: "0x04",
+//       }
 
-      let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
-      console.log('created prover and verifier');
+//       let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
+//       console.log('created prover and verifier');
 
-      const proof = await create_proof(prover, acir, abi);
-      console.log('proof: ' + proof.toString('hex'));
+//       const proof = await create_proof(prover, acir, abi);
+//       console.log('proof: ' + proof.toString('hex'));
 
-      const verified = await verify_proof(verifier, proof);
+//       const verified = await verify_proof(verifier, proof);
     
-      console.log(verified);
+//       console.log(verified);
 
-      expect(verified).eq(true)
-  });
+//       expect(verified).eq(true)
+//   });
 
-    it("Code breaker has hits, but without a win", async () => {
-        let [hit, blow] = calculateHB([1, 2, 3, 4], [1, 3, 5, 4]);
+//     it("Code breaker has hits, but without a win", async () => {
+//         let [hit, blow] = calculateHB([1, 2, 3, 4], [1, 3, 5, 4]);
+
+//         let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
+//         let acir = acir_from_bytes(acirByteArray);
+
+//         let abi = {
+//             guessA: "0x01", // Must have even number of digits for hex representation to work
+//             guessB: "0x02",
+//             guessC: "0x03",
+//             guessD: "0x04",
+//             numHit: "0x0" + hit.toString(),
+//             numBlow: "0x0" + blow.toString(),
+//             solnA: "0x01",
+//             solnB: "0x03",
+//             solnC: "0x05",
+//             solnD: "0x04",
+//         }
+
+//         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
+//         console.log('created prover and verifier');
+ 
+//         const proof = await create_proof(prover, acir, abi);
+//         console.log('proof: ' + proof.toString('hex'));
+
+//         const verified = await verify_proof(verifier, proof);
+      
+//         console.log(verified);
+
+//         expect(verified).eq(true)
+//     });
+
+//     it("Code breaker has no hits, but has a blow", async () => {
+//         let [hit, blow] = calculateHB([4, 5, 6, 7], [1, 2, 3, 4]);
+
+//         let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
+//         let acir = acir_from_bytes(acirByteArray);
+
+//         let abi = {
+//             guessA: "0x04", // Must have even number of digits for hex representation to work
+//             guessB: "0x05",
+//             guessC: "0x06",
+//             guessD: "0x07",
+//             numHit: "0x0" + hit.toString(),
+//             numBlow: "0x0" + blow.toString(),
+//             solnA: "0x01",
+//             solnB: "0x02",
+//             solnC: "0x03",
+//             solnD: "0x04",
+//         }
+
+//         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
+//         console.log('created prover and verifier');
+ 
+//         const proof = await create_proof(prover, acir, abi);
+//         console.log('proof: ' + proof.toString('hex'));
+
+//         const verified = await verify_proof(verifier, proof);
+      
+//         console.log(verified);
+
+//         expect(verified).eq(true)
+//     });
+
+    // TODO: The comments in this test are all further work to get the typescript wrapper pedersen matching
+    // up with the results calculated by pedersen in the wasm prover 
+    it("Code breaker wins", async () => {
+        let preimage = [
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000032', 'hex'), // Salt
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000001', 'hex'), 
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000002', 'hex'), 
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000003', 'hex'), 
+            Buffer.from('0000000000000000000000000000000000000000000000000000000000000004', 'hex'), 
+        ];
+        let solnHash = pedersen.compressInputs(preimage);
+        let solnHashString = `0x` + solnHash.toString('hex');
+        console.log('solnHash: ' + solnHashString); 
 
         let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
         let acir = acir_from_bytes(acirByteArray);
+
+        // let witnessByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.tr'));
+        // const barretenberg_witness_arr = await packed_witness_to_witness(acir, witnessByteArray);
+        // console.log('barretenberg_witness_arr: {:?} ', barretenberg_witness_arr);
 
         let abi = {
             guessA: "0x01", // Must have even number of digits for hex representation to work
             guessB: "0x02",
             guessC: "0x03",
             guessD: "0x04",
-            numHit: "0x0" + hit.toString(),
-            numBlow: "0x0" + blow.toString(),
-            solnA: "0x01",
-            solnB: "0x03",
-            solnC: "0x05",
-            solnD: "0x04",
-        }
-
-        let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
-        console.log('created prover and verifier');
- 
-        const proof = await create_proof(prover, acir, abi);
-        console.log('proof: ' + proof.toString('hex'));
-
-        const verified = await verify_proof(verifier, proof);
-      
-        console.log(verified);
-
-        expect(verified).eq(true)
-    });
-
-    it("Code breaker has no hits, but has a blow", async () => {
-        let [hit, blow] = calculateHB([4, 5, 6, 7], [1, 2, 3, 4]);
-
-        let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
-        let acir = acir_from_bytes(acirByteArray);
-
-        let abi = {
-            guessA: "0x04", // Must have even number of digits for hex representation to work
-            guessB: "0x05",
-            guessC: "0x06",
-            guessD: "0x07",
-            numHit: "0x0" + hit.toString(),
-            numBlow: "0x0" + blow.toString(),
+            numHit: "0x04",
+            numBlow: "0x00",
+            solnHash: solnHashString,
             solnA: "0x01",
             solnB: "0x02",
             solnC: "0x03",
             solnD: "0x04",
+            salt: "0x32",
         }
+        console.dir(abi);
 
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
         console.log('created prover and verifier');
- 
+    
+        // const proof = await create_proof_with_witness(prover, barretenberg_witness_arr);
         const proof = await create_proof(prover, acir, abi);
         console.log('proof: ' + proof.toString('hex'));
 
@@ -118,80 +180,6 @@ describe('Mastermind tests using typescript wrapper', function() {
 
         expect(verified).eq(true)
     });
-
-    // TODO: The comments in this test are all further work to get the typescript wrapper pedersen matching
-    // up with the results calculated by pedersen in the wasm prover 
-    // it("Code breaker wins", async () => {
-    //     // TODO: hash currently fails with wasm prover, most likely some serialization err 
-    //     // let salt = Buffer.from('32', 'hex');
-    //     // console.log('salt: ' + salt);
-    //     let preimage = [
-    //         Buffer.from('0000000000000000000000000000000000000000000000000000000000000001', 'hex'), 
-    //         Buffer.from('0000000000000000000000000000000000000000000000000000000000000002', 'hex'), 
-    //         Buffer.from('0000000000000000000000000000000000000000000000000000000000000003', 'hex'), 
-    //         Buffer.from('0000000000000000000000000000000000000000000000000000000000000004', 'hex'), 
-    //     ];
-    //     console.log('guess: ' + Buffer.from('0000000000000000000000000000000000000000000000000000000000000001', 'hex').toString('hex'));
-    //     console.dir(preimage);
-    //     let salt = Buffer.from("0000000000000000000000000000000000000000000000000000000000000032", "hex");
-    //     let solnHash = pedersen.compressInputs([salt, preimage[0], preimage[1], preimage[2], preimage[3]]);
-    //     let solnHashString = `0x` + solnHash.toString('hex');
-    //     console.log('solnHash: ' + solnHashString); 
-
-    //     let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
-    //     let acir = acir_from_bytes(acirByteArray);
-
-    //     // let initial_js_witness = [
-    //     //     "0x01", // Must have even number of digits for hex representation to work
-    //     //     "0x02",
-    //     //     "0x03",
-    //     //     "0x04",
-    //     //     "0x04",
-    //     //     "0x00",
-    //     //     "0x000000000", 
-    //     //     "0x01",
-    //     //     "0x02",
-    //     //     "0x03",
-    //     //     "0x04",
-    //     //     "0x32"
-    //     // ]
-    //     // TODO: this gives Unreachable err in wasm when using 
-    //     // const barretenberg_witness_arr = compute_witnesses(acir, initial_js_witness); 
-
-    //     // let witnessByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.tr'));
-    //     // const barretenberg_witness_arr = await packed_witness_to_witness(acir, witnessByteArray);
-    //     // console.log('barretenberg_witness_arr: {:?} ', barretenberg_witness_arr);
-
-    //     let abi = {
-    //         guessA: "0x01", // Must have even number of digits for hex representation to work
-    //         guessB: "0x02",
-    //         guessC: "0x03",
-    //         guessD: "0x04",
-    //         numHit: "0x04",
-    //         numBlow: "0x00",
-    //         // solnHash: "0x109243",
-    //         // solnHash: solnHashString,
-    //         solnA: "0x01",
-    //         solnB: "0x02",
-    //         solnC: "0x03",
-    //         solnD: "0x04",
-    //         salt: "0x32",
-    //     }
-    //     console.dir(abi);
-
-    //     let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
-    //     console.log('created prover and verifier');
-    
-    //     // const proof = await create_proof_with_witness(prover, barretenberg_witness_arr);
-    //     const proof = await create_proof(prover, acir, abi);
-    //     console.log('proof: ' + proof.toString('hex'));
-
-    //     const verified = await verify_proof(verifier, proof);
-      
-    //     console.log(verified);
-
-    //     expect(verified).eq(true)
-    // });
 
 });
 

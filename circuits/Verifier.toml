@@ -4,7 +4,7 @@ guessC = "3"
 guessD = "4"
 numHit = "4"
 numBlow = "0"
-# solnHash = "0x109243bde5fa6c2fe3f231697447a7e45853eade6727ca11faa5a935e434a703"
+solnHash = "0x01deb83e303e2b30ea88be1741e769b3171a85cb77d709c8f503925c1328f264"
 setpub = []
 
 # guessA = "4"
