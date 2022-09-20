@@ -53,7 +53,6 @@ fn main(
 
     constrain hit == numHit;
 
-    // TODO: fix JS hashing logic here and add this back
     let privSolnHash = std::hash::pedersen([salt as Field, solnA as Field, solnB as Field, solnC as Field, solnD as Field]);
 
     constrain solnHash == privSolnHash[0];

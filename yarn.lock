@@ -447,17 +447,22 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@noir-lang/aztec_backend@0.1.2", "@noir-lang/aztec_backend@^0.1.2":
+"@noir-lang/aztec_backend@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@noir-lang/aztec_backend/-/aztec_backend-0.8.0.tgz#64e9e5e886932903010b4d22fcc86285a5e5d7db"
+  integrity sha512-7f5/3s0UQZyGd6vTnTOo+MJCbQiWoSW6HLNfWkszPc9CQ4HcZe81nTK4sQz7isagZmbOf6UDahGmwaBibIdcEw==
+
+"@noir-lang/aztec_backend@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@noir-lang/aztec_backend/-/aztec_backend-0.1.2.tgz#50e309304918619fb49f3b985797f9ba5c0a7abe"
   integrity sha512-Ta2ijseeEOdaXtvzpH/AWfzMf46azfTpIyO38rONhF+FxgpVvkjBQXuZYkd1Txe1Yl/pN55WJg3ZsDLDtxJQPA==
 
-"@noir-lang/barretenberg@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@noir-lang/barretenberg/-/barretenberg-2.9.0.tgz#8616ae4e205bdb59c1b5359b0569764b57c84e6a"
-  integrity sha512-Q23Fdp5j+ChDTPZEe5jEJurbOl3CIWJ4nfQRWrem5n4eLkuMrWGpGnH3APlXtg93swHfzeFcBT35y/FhKX+4gQ==
+"@noir-lang/barretenberg@^2.15.0":
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/@noir-lang/barretenberg/-/barretenberg-2.15.0.tgz#ec58235f8a89161fa8df9862b14654e6c40f98bf"
+  integrity sha512-AaGPWGcXv15SsUoyzo27l+lzJfwhwYXVdTohdXKKZWStG/5DJIr8yd+xgVCgJiQWqXPU8khBZVJ6OMMhzK3Vcw==
   dependencies:
-    "@noir-lang/aztec_backend" "0.1.2"
+    "@noir-lang/aztec_backend" "0.8.0"
     "@types/detect-node" "^2.0.0"
     "@types/levelup" "^4.3.0"
     buffer-browserify "^0.2.5"
@@ -473,10 +478,10 @@
     threads "1.7.0"
     tslib "^2.0.0"
 
-"@noir-lang/noir_wasm@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@noir-lang/noir_wasm/-/noir_wasm-0.3.0.tgz#ac3ffdc20a3ea7b673b4d18c9b893e772b081f3b"
-  integrity sha512-cHsyF/KexLecrEFBvJ+xX5YLEn+CvRCNoQOUcP4yxcqJNgE2g9Dn4BX7ApSFXkW4waxtRhbReMYg2B9pmsyZVg==
+"@noir-lang/noir_wasm@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@noir-lang/noir_wasm/-/noir_wasm-0.10.0.tgz#9223c2ab92cf24da7e483c4131179a4d62a59c19"
+  integrity sha512-ZoNlOqjGxf0YDCQP/tmD+2KsCePvjc0xcMiefmNREDyE3rpDCUiLt6B7kaXztFqPxpT7hi8+ARFUx7cZyqqZtg==
 
 "@nomicfoundation/ethereumjs-block@^4.0.0", "@nomicfoundation/ethereumjs-block@^4.0.0-rc.3":
   version "4.0.0"
@@ -2007,9 +2012,9 @@ cookiejar@^2.1.1:
   integrity sha512-JxbCBUdrfr6AQjOXrxoTvAMJO4HBTUIlBzslcJPAz+/KT8yk53fXun51u+RenNYvad/+Vc2DIz5o9UxlCDymFQ==
 
 core-js@^3.6.1:
-  version "3.25.1"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.25.1.tgz#5818e09de0db8956e16bf10e2a7141e931b7c69c"
-  integrity sha512-sr0FY4lnO1hkQ4gLDr24K0DGnweGO1QwSj5BpfQjpSJPdqWalja4cTps29Y/PJVG/P7FYlPDkH3hO+Tr0CvDgQ==
+  version "3.25.2"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.25.2.tgz#2d3670c1455432b53fa780300a6fc1bd8304932c"
+  integrity sha512-YB4IAT1bjEfxTJ1XYy11hJAKskO+qmhuDBM8/guIfMz4JvdsAQAqvyb97zXX7JgSrfPLG5mRGFWJwJD39ruq2A==
 
 core-util-is@1.0.2:
   version "1.0.2"
