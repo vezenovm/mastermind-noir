@@ -29,6 +29,7 @@
     "@aztec/barretenberg": "^2.1.40",
     "@noir-lang/aztec_backend": "^0.1.2",
     "@noir-lang/barretenberg": "^2.15.0",
-    "@noir-lang/noir_wasm": "^0.10.0"
+    "@noir-lang/noir_wasm": "^0.10.0",
+    "toml": "^3.0.0"
   }
 }
