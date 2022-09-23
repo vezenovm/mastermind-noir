@@ -131,6 +131,7 @@ describe('Mastermind tests using typescript wrapper', function() {
             solnD: solution[3],
             salt: salt,
         }
+        console.dir(abi);
 
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
  
