@@ -1,17 +1,17 @@
 use dep::std;
 
 fn main(
-    guessA: pub u32, 
-    guessB: pub u32,
-    guessC: pub u32,
-    guessD: pub u32,
-    numHit: pub u32,
-    numBlow: pub u32,
+    guessA: pub u4, 
+    guessB: pub u4,
+    guessC: pub u4,
+    guessD: pub u4,
+    numHit: pub u4,
+    numBlow: pub u4,
     solnHash: pub Field,
-    solnA: u32,
-    solnB: u32,
-    solnC: u32,
-    solnD: u32,
+    solnA: u4,
+    solnB: u4,
+    solnC: u4,
+    solnD: u4,
     salt: u32
 ) {
     let mut guess = [guessA, guessB, guessC, guessD];
@@ -32,12 +32,12 @@ fn main(
         };
     };
 
-    let mut hit: u32 = 0;
-    let mut blow: u32 = 0;
+    let mut hit: u4 = 0;
+    let mut blow: u4 = 0;
 
     for i in 0..4 {
         for j in 0..4 {
-            let mut isEqual: u32 = 0;
+            let mut isEqual: u4 = 0;
             if (guess[i] == soln[j]) {
                 isEqual = 1;
                 blow = blow + 1;
