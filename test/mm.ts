@@ -9,6 +9,21 @@ import { readFileSync } from 'fs';
 import { expect } from 'chai';
 import { Contract, ContractFactory, utils } from 'ethers';
 
+type MMProofInput = {
+    guessA: number;
+    guessB: number;
+    guessC: number;
+    guessD: number;
+    numHit: number;
+    numBlow: number;
+    solnHash: string;
+    solnA: number;
+    solnB: number;
+    solnC: number;
+    solnD: number;
+    salt: number;
+}
+
 describe('Mastermind tests using typescript wrapper', function() {
     let barretenberg: BarretenbergWasm;
     let pedersen: SinglePedersen;
@@ -19,22 +34,16 @@ describe('Mastermind tests using typescript wrapper', function() {
         pedersen = new SinglePedersen(barretenberg);
     });
 
-    it("Code breaker wins, compiled using noir wasm", async () => {
-        let guesses = [1, 2, 3, 4];
-        let solution = [1, 2, 3, 4];
-        let salt = 50;
+    function createProofInput(guesses: number[], solution: number[], salt: number) : MMProofInput {
         let [hit, blow] = calculateHB(guesses, solution);
         console.log('hit: ', hit, 'blow: ', blow);
 
         let solution_hash_preimage = serialise_inputs([salt, ...solution]);
         let solnHash = pedersen.compressInputs(solution_hash_preimage);
         let solnHashString = `0x` + solnHash.toString('hex');
-        console.log('solnHash: ' + solnHashString); 
+        console.log('solnHash: ' + solnHashString);
 
-        let compiled_program = compile(resolve(__dirname, '../circuits/src/main.nr'));
-        const acir = compiled_program.circuit;
-
-        let abi = {
+        return {
             guessA: guesses[0],
             guessB: guesses[1],
             guessC: guesses[2],
@@ -48,9 +57,19 @@ describe('Mastermind tests using typescript wrapper', function() {
             solnD: solution[3],
             salt: salt,
         }
+    }
+
+    it("Code breaker wins, compiled using noir wasm", async () => {
+        let guesses = [1, 2, 3, 4];
+        let solution = [1, 2, 3, 4];
+        let salt = 50;
+
+        let compiled_program = compile(resolve(__dirname, '../circuits/src/main.nr'));
+        const acir = compiled_program.circuit;
 
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
         
+        let abi = createProofInput(guesses, solution, salt)
         const proof = await create_proof(prover, acir, abi);
         console.log('proof: ' + proof.toString('hex'));
 
@@ -65,35 +84,15 @@ describe('Mastermind tests using typescript wrapper', function() {
         let guesses = [1, 2, 3, 4];
         let solution = [1, 2, 3, 4];
         let salt = 50;
-        let [hit, blow] = calculateHB(guesses, solution);
-        console.log('hit: ', hit, 'blow: ', blow);
-
-        let solution_hash_preimage = serialise_inputs([salt, ...solution]);
-        let solnHash = pedersen.compressInputs(solution_hash_preimage);
-        let solnHashString = `0x` + solnHash.toString('hex');
-        console.log('solnHash: ' + solnHashString); 
 
         let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
         let acir = acir_from_bytes(acirByteArray);
 
-        let abi = {
-            guessA: guesses[0], 
-            guessB: guesses[1],
-            guessC: guesses[2],
-            guessD: guesses[3],
-            numHit: hit,
-            numBlow: blow,
-            solnHash: solnHashString,
-            solnA: solution[0],
-            solnB: solution[1],
-            solnC: solution[2],
-            solnD: solution[3],
-            salt: salt,
-        }
-
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
 
+        let abi = createProofInput(guesses, solution, salt)
         const proof = await create_proof(prover, acir, abi);
+        console.log('proof: ' + proof.toString('hex'));
 
         const verified = await verify_proof(verifier, proof);
     
@@ -106,32 +105,11 @@ describe('Mastermind tests using typescript wrapper', function() {
         let guesses = [1, 2, 3, 4];
         let solution = [1, 3, 5, 4];
         let salt = 50;
-        let [hit, blow] = calculateHB(guesses, solution);
-        console.log('hit: ', hit, 'blow: ', blow);
-
-        let solution_hash_preimage = serialise_inputs([salt, ...solution]);
-        let solnHash = pedersen.compressInputs(solution_hash_preimage);
-        let solnHashString = `0x` + solnHash.toString('hex');
-        console.log('solnHash: ' + solnHashString); 
 
         let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
         let acir = acir_from_bytes(acirByteArray);
 
-        let abi = {
-            guessA: guesses[0],
-            guessB: guesses[1],
-            guessC: guesses[2],
-            guessD: guesses[3],
-            numHit: hit,
-            numBlow: blow,
-            solnHash: solnHashString,
-            solnA: solution[0],
-            solnB: solution[1],
-            solnC: solution[2],
-            solnD: solution[3],
-            salt: salt,
-        }
-        console.dir(abi);
+        let abi = createProofInput(guesses, solution, salt)
 
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
  
@@ -148,34 +126,14 @@ describe('Mastermind tests using typescript wrapper', function() {
         let guesses = [4, 5, 6, 7];
         let solution = [1, 2, 3, 4];
         let salt = 50;
-        let [hit, blow] = calculateHB(guesses, solution);
-        console.log('hit: ', hit, 'blow: ', blow);
-
-        let solution_hash_preimage = serialise_inputs([salt, ...solution]);
-        let solnHash = pedersen.compressInputs(solution_hash_preimage);
-        let solnHashString = `0x` + solnHash.toString('hex');
-        console.log('solnHash: ' + solnHashString); 
 
         let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
         let acir = acir_from_bytes(acirByteArray);
 
-        let abi = {
-            guessA: guesses[0], 
-            guessB: guesses[1],
-            guessC: guesses[2],
-            guessD: guesses[3],
-            numHit: hit,
-            numBlow: blow,
-            solnHash: solnHashString,
-            solnA: solution[0],
-            solnB: solution[1],
-            solnC: solution[2],
-            solnD: solution[3],
-            salt: salt,
-        }
 
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
  
+        let abi = createProofInput(guesses, solution, salt)
         const proof = await create_proof(prover, acir, abi);
 
         const verified = await verify_proof(verifier, proof);
@@ -203,20 +161,16 @@ describe('Mastermind tests using solidity verifier', function() {
         pedersen = new SinglePedersen(barretenberg);
     });
 
-    it("Code breaker wins", async () => {
-        let guesses = [1, 2, 3, 4];
-        let solution = [1, 2, 3, 4];
-        let salt = 50;
+    function createProofInput(guesses: number[], solution: number[], salt: number) : MMProofInput {
         let [hit, blow] = calculateHB(guesses, solution);
+        console.log('hit: ', hit, 'blow: ', blow);
 
         let solution_hash_preimage = serialise_inputs([salt, ...solution]);
         let solnHash = pedersen.compressInputs(solution_hash_preimage);
         let solnHashString = `0x` + solnHash.toString('hex');
+        console.log('solnHash: ' + solnHashString);
 
-        let compiled_program = compile(resolve(__dirname, '../circuits/src/main.nr'));
-        const acir = compiled_program.circuit;
-
-        let abi = {
+        return {
             guessA: guesses[0],
             guessB: guesses[1],
             guessC: guesses[2],
@@ -230,10 +184,19 @@ describe('Mastermind tests using solidity verifier', function() {
             solnD: solution[3],
             salt: salt,
         }
-        console.dir(abi);
+    }
+
+    it("Code breaker wins", async () => {
+        let guesses = [1, 2, 3, 4];
+        let solution = [1, 2, 3, 4];
+        let salt = 50;
+       
+        let compiled_program = compile(resolve(__dirname, '../circuits/src/main.nr'));
+        const acir = compiled_program.circuit;
 
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
  
+        let abi = createProofInput(guesses, solution, salt)
         const proof: Buffer = await create_proof(prover, acir, abi);
 
         const verified = await verify_proof(verifier, proof);
@@ -247,34 +210,13 @@ describe('Mastermind tests using solidity verifier', function() {
         let guesses = [1, 2, 3, 4];
         let solution = [1, 3, 5, 4];
         let salt = 50;
-        let [hit, blow] = calculateHB(guesses, solution);
-        console.log('hit: ', hit, 'blow: ', blow);
-
-        let solution_hash_preimage = serialise_inputs([salt, ...solution]);
-        let solnHash = pedersen.compressInputs(solution_hash_preimage);
-        let solnHashString = `0x` + solnHash.toString('hex');
-        console.log('solnHash: ' + solnHashString); 
 
         let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
         let acir = acir_from_bytes(acirByteArray);
 
-        let abi = {
-            guessA: guesses[0],
-            guessB: guesses[1],
-            guessC: guesses[2],
-            guessD: guesses[3],
-            numHit: hit,
-            numBlow: blow,
-            solnHash: solnHashString,
-            solnA: solution[0],
-            solnB: solution[1],
-            solnC: solution[2],
-            solnD: solution[3],
-            salt: salt,
-        }
-
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
  
+        let abi = createProofInput(guesses, solution, salt)
         const proof = await create_proof(prover, acir, abi);
 
         const verified = await verify_proof(verifier, proof);
