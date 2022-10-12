@@ -51,7 +51,7 @@ fn main(
 
     constrain numBlow == blow;
 
-    constrain hit == numHit;
+    constrain numHit == hit;
 
     let privSolnHash = std::hash::pedersen([salt as Field, solnA as Field, solnB as Field, solnC as Field, solnD as Field]);
 

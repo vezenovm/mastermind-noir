@@ -44,7 +44,9 @@ cd circuits/
 nargo compile p
 ```
 
-We use these three packages to interact with the ACIR. `@noir-lang/noir_wasm` to serialize the ACIR from file. 
+We use these three packages to interact with the ACIR and aztec backend. `@noir-lang/noir_wasm`, `@noir-lang/barretenberg`, and `@noir-lang/aztec_backend`.
+
+`@noir-lang/noir_wasm` is used to serialize the ACIR from file. 
 ```
 let acirByteArray = path_to_uint8array(path.resolve(__dirname, '../circuits/build/p.acir'));
 let acir = acir_from_bytes(acirByteArray);
