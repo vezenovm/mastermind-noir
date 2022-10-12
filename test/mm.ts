@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { BarretenbergWasm } from '@noir-lang/barretenberg/dest/wasm';
 import { SinglePedersen } from '@noir-lang/barretenberg/dest/crypto/pedersen';
 import { compile, acir_from_bytes } from '@noir-lang/noir_wasm';
-import { setup_generic_prover_and_verifier, create_proof, verify_proof } from '@noir-lang/barretenberg/dest/client_proofs';
+import { setup_generic_prover_and_verifier, create_proof, verify_proof, StandardExampleProver, StandardExampleVerifier } from '@noir-lang/barretenberg/dest/client_proofs';
 import { serialise_public_inputs } from '@noir-lang/aztec_backend';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
@@ -27,11 +27,18 @@ type MMProofInput = {
 describe('Mastermind tests using typescript wrapper', function() {
     let barretenberg: BarretenbergWasm;
     let pedersen: SinglePedersen;
+    let acir: any;
+    let prover: StandardExampleProver;
+    let verifier: StandardExampleVerifier;
 
     before(async () => {
         barretenberg = await BarretenbergWasm.new();
         await barretenberg.init()
         pedersen = new SinglePedersen(barretenberg);
+
+        let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
+        acir = acir_from_bytes(acirByteArray);
+        [prover, verifier] = await setup_generic_prover_and_verifier(acir);
     });
 
     function createProofInput(guesses: number[], solution: number[], salt: number) : MMProofInput {
@@ -59,36 +66,10 @@ describe('Mastermind tests using typescript wrapper', function() {
         }
     }
 
-    it("Code breaker wins, compiled using noir wasm", async () => {
-        let guesses = [1, 2, 3, 4];
-        let solution = [1, 2, 3, 4];
-        let salt = 50;
-
-        let compiled_program = compile(resolve(__dirname, '../circuits/src/main.nr'));
-        const acir = compiled_program.circuit;
-
-        let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
-        
-        let abi = createProofInput(guesses, solution, salt)
-        const proof = await create_proof(prover, acir, abi);
-        console.log('proof: ' + proof.toString('hex'));
-
-        const verified = await verify_proof(verifier, proof);
-    
-        console.log(verified);
-
-        expect(verified).eq(true)
-    });
-
     it("Code breaker wins, compiled using nargo", async () => {
         let guesses = [1, 2, 3, 4];
         let solution = [1, 2, 3, 4];
         let salt = 50;
-
-        let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
-        let acir = acir_from_bytes(acirByteArray);
-
-        let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
 
         let abi = createProofInput(guesses, solution, salt)
         const proof = await create_proof(prover, acir, abi);
@@ -106,13 +87,8 @@ describe('Mastermind tests using typescript wrapper', function() {
         let solution = [1, 3, 5, 4];
         let salt = 50;
 
-        let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
-        let acir = acir_from_bytes(acirByteArray);
+        let abi = createProofInput(guesses, solution, salt);
 
-        let abi = createProofInput(guesses, solution, salt)
-
-        let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
- 
         const proof = await create_proof(prover, acir, abi);
 
         const verified = await verify_proof(verifier, proof);
@@ -126,12 +102,6 @@ describe('Mastermind tests using typescript wrapper', function() {
         let guesses = [4, 5, 6, 7];
         let solution = [1, 2, 3, 4];
         let salt = 50;
-
-        let acirByteArray = path_to_uint8array(resolve(__dirname, '../circuits/build/p.acir'));
-        let acir = acir_from_bytes(acirByteArray);
-
-
-        let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
  
         let abi = createProofInput(guesses, solution, salt)
         const proof = await create_proof(prover, acir, abi);
